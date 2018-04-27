@@ -16,9 +16,9 @@
 #include </opt/cprocsp/include/cpcsp/CSP_WinCrypt.h>
 
 void HandleError(const char*);
-/*HCRYPTPROV InitializeProvider(const char*, const char*);
+//HCRYPTPROV InitializeProvider(const char*, const char*);
 unsigned char* GetPurePubKey(const char*, const char*);
-char* ConvertPubkeyBytesToString(unsigned const char*);*/
+//char* ConvertPubkeyBytesToString(unsigned const char*);
 uint8_t* datahex(const char*);
 
 #endif

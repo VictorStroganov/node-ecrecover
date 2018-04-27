@@ -28,4 +28,25 @@ func RecoverAddress(hashHex *C.char, signRhex, signShex *C.char, signV byte) (*C
 	return C.CString(addrHex), nil
 }
 
+//export SetNodeContainer
+func SetNodeContainer(keyContainer, passphrase *C.char) (*C.char, *C.char) {
+	crypto_csp.SetNodeContainer( C.GoString(keyContainer), C.GoString(passphrase) )
+
+	return C.CString("ok"), nil
+}
+
+//export Sign
+func Sign(container, pin, hashHex *C.char) (*C.char, *C.char) {
+	hash, _ := hex.DecodeString( C.GoString(hashHex) )
+
+	sign, err := crypto_csp.Sign( C.GoString(container), C.GoString(pin), hash)
+
+	if err != nil {
+		return nil, C.CString(err.Error())
+	}
+
+	signHex := hex.EncodeToString(sign)
+	return C.CString(signHex), nil
+}
+
 func main() {}

@@ -26,7 +26,9 @@ var CallResult = Struct({
 });
 
 const ecrecoverLib = ffi.Library(pathToEcrecoverLib, {
-	'RecoverAddress': [CallResult, ['string', 'string', 'string', byte]]
+	'RecoverAddress': [CallResult, ['string', 'string', 'string', byte]],
+	'SetNodeContainer': [CallResult, ['string', 'string']],
+	'Sign': [CallResult, ['string', 'string', 'string']]
 });
 
 module.exports = {
@@ -48,5 +50,25 @@ module.exports = {
 		} else {
 			return result.result;
 		}
-	}
+	},
+	setNodeContainer: (containerName, passphrase) => {
+		const result = ecrecoverLib.SetNodeContainer(containerName, passphrase);
+
+		if(result.error) {
+			throw new Error(result.error);
+		} else {
+			return result.result;
+		}
+
+	},
+	////(container, pin string, hash []byte) (*C.char, *C.char)
+	sign: (container, pin, hashHex) => {
+		const result = ecrecoverLib.Sign(container, pin, hashHex);
+
+		if(result.error) {
+			throw new Error(result.error);
+		} else {
+			return result.result;
+		}
+	}	
 };

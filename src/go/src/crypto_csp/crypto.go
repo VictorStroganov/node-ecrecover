@@ -14,7 +14,7 @@ import (
 	//"encoding/binary"
 )
 
-/*
+
 var(
 	nodeContainer = ""
 	nodePin = ""
@@ -23,7 +23,7 @@ var(
 func SetNodeContainer(keyContainer, passphrase string) {
 	nodeContainer = keyContainer
 	nodePin = passphrase
-}*/
+}
 /*
 func GetUncertifiedHash(data ...[]byte) []byte {
 	d := sha3.NewKeccak256()
@@ -107,7 +107,7 @@ func PublicKeyBytes(pub *PublicKey) []byte {
 	}
 	return pub.Raw()
 }*/
-/*
+
 func Sign(container, pin string, hash []byte) (sig []byte, err error) {
 	if len(hash) != 32 {
 		return nil, fmt.Errorf("hash is required to be exactly 32 bytes (%d)", len(hash))
@@ -116,7 +116,7 @@ func Sign(container, pin string, hash []byte) (sig []byte, err error) {
 	curve, _ := NewCurveFromParams256(CurveParamsGostR34102001CryptoProA)
 	sig, err = signCompact(curve, container, pin, hash)
 	return
-}*/
+}
 
 func Ecrecover(hash, sig []byte) ([]byte, error) {
 	curve, _ := NewCurveFromParams256(CurveParamsGostR34102001CryptoProA)
@@ -215,7 +215,7 @@ func CreateAddress(b common.Address, nonce uint64) common.Address {
 	data, _ := rlp.EncodeToBytes([]interface{}{b, nonce})
 	return common.BytesToAddress(Gost34112012_256(data)[12:])
 }*/
-/*
+
 func signCompact(curve *Curve, container, pin string, hash []byte) ([]byte, error) {
 	revHash := make([]byte, 32)
 	copy(revHash, hash)
@@ -242,7 +242,7 @@ func signCompact(curve *Curve, container, pin string, hash []byte) ([]byte, erro
 	}
 
 	return nil, errors.New("no valid solution for pubkey found")
-}*/
+}
 
 func recoverCompact(curve *Curve, hash, signature []byte) (*PublicKey, error) {
 	bitlen := (curve.BitSize + 7) / 8
@@ -262,10 +262,10 @@ func recoverCompact(curve *Curve, hash, signature []byte) (*PublicKey, error) {
 		return nil, err
 	}
 
-/*	verified := cspVerifySignature(nodeContainer, nodePin, hash, signature, key.Raw())
+	verified := cspVerifySignature(nodeContainer, nodePin, hash, signature, key.Raw())
 	if !verified {
 		return nil, errors.New("Restored pubkey doesn't verify given signature using CSP")
-	}*/
+	}
 
 	return key, nil
 }

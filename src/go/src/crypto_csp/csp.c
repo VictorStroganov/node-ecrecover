@@ -4,7 +4,7 @@
 #include "csp.h"
 //#include "tls.h"
 
-//static const char *blobHeader = "06200000492e00004d41473100020000301306072a85030202230106082a85030701010202";
+static const char *blobHeader = "06200000492e00004d41473100020000301306072a85030202230106082a85030701010202";
 
 unsigned char* CalculateHash(const char *msg, const uint32_t len)
 {
@@ -66,7 +66,7 @@ unsigned char* CalculateHash(const char *msg, const uint32_t len)
 
     return pbHash;
 }
-/*
+
 unsigned char* SignHash(const char *container, const char *pin, const uint8_t *msg)
 {
     HCRYPTPROV hProv = 0;
@@ -254,4 +254,4 @@ uint8_t SignatureVerify(const char *container, const char *pin, const uint8_t *m
         CryptReleaseContext(hProv, 0);
 
     return result;
-}*/
+}

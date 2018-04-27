@@ -16,7 +16,7 @@ import (
 	"unsafe"
 	_ "encoding/hex"
 	_ "encoding/binary"
-	_ "fmt"
+	"fmt"
 )
 /*
 type credentials struct {
@@ -96,8 +96,6 @@ func intToUintC(n int) C.uint32_t {
 	return *(*C.uint32_t)(unsafe.Pointer(&n))
 }
 
-/*
-
 func cspSignHash(container, pin string, hash []byte) []byte {
 	cHash := bytePtrUint8(hash)
 	cContainer := C.CString(container)
@@ -112,7 +110,29 @@ func cspSignHash(container, pin string, hash []byte) []byte {
 	return b
 }
 
+func cspGetPurePublicKey(container, pin string) []byte {
+	cContainer := C.CString(container)
+	cPin := C.CString(pin)
+	defer C.free(unsafe.Pointer(cContainer))
+	defer C.free(unsafe.Pointer(cPin))
+
+	pub := C.GetPurePubKey(cContainer, cPin)
+	data := (*C.char)(unsafe.Pointer(pub))
+	b := []byte(C.GoStringN(data, 64))
+
+	return b
+}
+
+func bytePtrUint8(s []byte) *C.uint8_t {
+	if len(s) != 0 {
+		return (*C.uint8_t)(unsafe.Pointer(&s[0]))
+	}
+	return nil
+}
+
 func cspVerifySignature(container, pin string, hash, signature, pubkey []byte) bool {
+	fmt.Printf("cspVerifySignature container: %s\n", container);
+	
 	sig := make([]byte, 64)
 	sig = append(sig, signature[32:64]...)
 	sig = append(sig, signature[:32]...)
@@ -133,18 +153,17 @@ func cspVerifySignature(container, pin string, hash, signature, pubkey []byte) b
 	return uint8ToBool(C.SignatureVerify(cContainer, cPin, cHash, cSig, cPub))
 }
 
-func cspGetPurePublicKey(container, pin string) []byte {
-	cContainer := C.CString(container)
-	cPin := C.CString(pin)
-	defer C.free(unsafe.Pointer(cContainer))
-	defer C.free(unsafe.Pointer(cPin))
-
-	pub := C.GetPurePubKey(cContainer, cPin)
-	data := (*C.char)(unsafe.Pointer(pub))
-	b := []byte(C.GoStringN(data, 64))
-
-	return b
+func uint8ToBool(b C.uint8_t) bool {
+	return b == 1
 }
+
+/*
+
+
+
+
+
+
 
 func cspCreateContainer(pin string) string {
 	tempContainer := "\\\\.\\HDIMAGE\\temp"
@@ -320,14 +339,7 @@ func bytePtrChar(s []byte) *C.char {
 	return nil
 }
 
-func bytePtrUint8(s []byte) *C.uint8_t {
-	if len(s) != 0 {
-		return (*C.uint8_t)(unsafe.Pointer(&s[0]))
-	}
-	return nil
-}
 
-func uint8ToBool(b C.uint8_t) bool {
-	return b == 1
-}
+
+
 */

@@ -73,6 +73,22 @@ struct RecoverAddress_return {
 
 extern struct RecoverAddress_return RecoverAddress(char* p0, char* p1, char* p2, GoUint8 p3);
 
+/* Return type for SetNodeContainer */
+struct SetNodeContainer_return {
+	char* r0;
+	char* r1;
+};
+
+extern struct SetNodeContainer_return SetNodeContainer(char* p0, char* p1);
+
+/* Return type for Sign */
+struct Sign_return {
+	char* r0;
+	char* r1;
+};
+
+extern struct Sign_return Sign(char* p0, char* p1, char* p2);
+
 #ifdef __cplusplus
 }
 #endif
