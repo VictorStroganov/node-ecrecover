@@ -28,7 +28,8 @@ var CallResult = Struct({
 const ecrecoverLib = ffi.Library(pathToEcrecoverLib, {
 	'RecoverAddress': [CallResult, ['string', 'string', 'string', byte]],
 	'SetNodeContainer': [CallResult, ['string', 'string']],
-	'Sign': [CallResult, ['string', 'string', 'string']]
+	'Sign': [CallResult, ['string', 'string', 'string']],
+	'GetAddressByPublicKey': [CallResult, ['string']]
 });
 
 module.exports = {
@@ -103,5 +104,21 @@ module.exports = {
 				v: v
 			};
 		}
-	}	
+	},
+	/**
+	 * Получение адреса по публичному ключу
+	 *
+	 * @param {String} publicKeyHex Публичный ключ, строка в формате hex
+	 *
+	 * @return {String} Адрес, строка в формате hex
+	 */
+	getAddressByPublicKey: (publicKeyHex) => {
+		const result = ecrecoverLib.GetAddressByPublicKey(publicKeyHex);
+
+		if(result.error) {
+			throw new Error(result.error);
+		} else {
+			return result.result;
+		}
+	},	
 };

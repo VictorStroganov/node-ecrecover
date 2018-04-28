@@ -49,4 +49,19 @@ func Sign(container, pin, hashHex *C.char) (*C.char, *C.char) {
 	return C.CString(signHex), nil
 }
 
+//export GetAddressByPublicKey
+func GetAddressByPublicKey(publicKeyHex *C.char) (*C.char, *C.char) {
+	publicKey, err := hex.DecodeString( C.GoString(publicKeyHex) )
+
+	if err != nil {
+		return nil, C.CString(err.Error())
+	}
+
+	addr := crypto_csp.PubkeyBytesToAddress(publicKey)
+
+	addrHex := hex.EncodeToString(addr)
+	
+	return C.CString(addrHex), nil
+}
+
 func main() {}

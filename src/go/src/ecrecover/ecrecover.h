@@ -89,6 +89,14 @@ struct Sign_return {
 
 extern struct Sign_return Sign(char* p0, char* p1, char* p2);
 
+/* Return type for GetAddressByPublicKey */
+struct GetAddressByPublicKey_return {
+	char* r0;
+	char* r1;
+};
+
+extern struct GetAddressByPublicKey_return GetAddressByPublicKey(char* p0);
+
 #ifdef __cplusplus
 }
 #endif

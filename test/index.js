@@ -45,7 +45,6 @@ describe('Тесты', function () {
 	});*/
 
 	it('Генерация сигнатуры хеша и восстановление параметров ключа', async () => {
-//		const pk = "90818e56a93e1ac3cf82467a6954236ca22772c3cd8256d618bbb332b2aa860f52a5ded5001f59eb62d01e596ff24f9fead5958f220b9175c31f5752dd02538b";
 		const hashHex = "52b52f1701e4294829d658c2c3bfbededf49426fc44185ebce7a59aba082305a";
 
 		let sign = ecrecoverLib.sign(containerName, passphrase, hashHex);
@@ -56,4 +55,12 @@ describe('Тесты', function () {
 
 		expect(recoveredAddress).to.deep.equal("f1e340a1d2b691ee18dd962349cf2dee1571110d");
 	});
+
+	it('Вычисление адреса по публичному ключу', async () => {
+		const publicKey = "90818e56a93e1ac3cf82467a6954236ca22772c3cd8256d618bbb332b2aa860f52a5ded5001f59eb62d01e596ff24f9fead5958f220b9175c31f5752dd02538b";
+
+		let address = ecrecoverLib.getAddressByPublicKey(publicKey);
+
+		expect(address).to.deep.equal("f1e340a1d2b691ee18dd962349cf2dee1571110d");
+	});	
 });
