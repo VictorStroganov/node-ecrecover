@@ -33,6 +33,15 @@ const ecrecoverLib = ffi.Library(pathToEcrecoverLib, {
 
 module.exports = {
 	/**
+	 * Объект, содержащий параметры цифровой подписи
+	 *
+	 * @typedef {Object} Sign
+	 * @property {String} signRhex Компонента r цифровой подписи хеша, строка в формате hex
+	 * @property {String} signRhex Компонента s цифровой подписи хеша, строка в формате hex
+	 * @property {Integer} signV Компонента v цифровой подписи хеша, целое число 27/28
+	 */
+
+	/**
 	 * Получение адреса по цифровой подписи хеша
 	 *
 	 * @param {String} hash Хеш, строка в формате hex
@@ -51,6 +60,14 @@ module.exports = {
 			return result.result;
 		}
 	},
+	/**
+	 * Установка имени и pin-кода ключевого контейнера перед вызовом функции recoverAddress()
+	 *
+	 * @param {String} containerName Имя ключевого контейнера
+	 * @param {String} passphrase pin-код ключевого кнотейнера
+	 *
+	 * @return {void}
+	 */
 	setNodeContainer: (containerName, passphrase) => {
 		const result = ecrecoverLib.SetNodeContainer(containerName, passphrase);
 
@@ -61,14 +78,30 @@ module.exports = {
 		}
 
 	},
-	////(container, pin string, hash []byte) (*C.char, *C.char)
+	/**
+	 * Вычисление цифровой подписи хеша
+	 *
+	 * @param {String} container Имя ключевого контейнера
+	 * @param {String} pin pin-код ключевого кнотейнера
+	 * @param {String} hashHex Хеш, строка в формате hex
+	 *
+	 * @return {Sign} Параметры цифровой подписи
+	 */
 	sign: (container, pin, hashHex) => {
 		const result = ecrecoverLib.Sign(container, pin, hashHex);
 
 		if(result.error) {
 			throw new Error(result.error);
 		} else {
-			return result.result;
+			const s = result.result.substr(64, 64);
+			const r = result.result.substr(0, 64);
+			const v = parseInt(result.result.substr(128, 2)) + 27;
+
+			return {
+				s: s,
+				r: r,
+				v: v
+			};
 		}
 	}	
 };

@@ -36,34 +36,24 @@ describe('Тесты', function () {
 		expect(recoveredAddress).to.deep.equal("a59b15b2bf888c2d29f059079c556a3f3a805262");
 	});
 
-	it('Генерация сигнатуры хеша', async () => {
+/*	it('Генерация сигнатуры хеша', async () => {
 		const hashHex = "52b52f1701e4294829d658c2c3bfbededf49426fc44185ebce7a59aba082305a";
 
 		let sign = ecrecoverLib.sign(containerName, passphrase, hashHex);
 
 		expect(sign).to.deep.equal("a59b15b2bf888c2d29f059079c556a3f3a805262");
-	});
-
-
-/*	it('Измерение времени восстановления адреса по хешу и сигнатуре', async () => {
-		const hashHex = "52b52f1701e4294829d658c2c3bfbededf49426fc44185ebce7a59aba082305a";
-
-		const signShex = "3b7b9b10d1d3d0c648f1385486885918153a2daed100ef63cdf359752f26f490";
-		const signRhex = "18a36fd2476cad701311f929cbb0f5404751d4cf138ef19d9280e3be1c138e0b";
-		const signV = 28;
-
-		let timeInMs = Date.now();
-
-		for(let i = 0; i < 100; i++) {
-			let recoveredAddress = ecrecoverLib.recoverAddress(hashHex, signRhex, signShex, signV);
-		}
-
-		timeInMs = Date.now() - timeInMs;
-		console.log('Время выполнения = ', timeInMs + " мс");
-
-		expect(recoveredAddress).to.deep.equal("a59b15b2bf888c2d29f059079c556a3f3a805262");
 	});*/
 
-	
+	it('Генерация сигнатуры хеша и восстановление параметров ключа', async () => {
+//		const pk = "90818e56a93e1ac3cf82467a6954236ca22772c3cd8256d618bbb332b2aa860f52a5ded5001f59eb62d01e596ff24f9fead5958f220b9175c31f5752dd02538b";
+		const hashHex = "52b52f1701e4294829d658c2c3bfbededf49426fc44185ebce7a59aba082305a";
 
+		let sign = ecrecoverLib.sign(containerName, passphrase, hashHex);
+
+		let recoveredAddress = ecrecoverLib.recoverAddress(hashHex, sign.r, sign.s, sign.v);
+
+		console.log("recoveredAddress: " + recoveredAddress);
+
+		expect(recoveredAddress).to.deep.equal("f1e340a1d2b691ee18dd962349cf2dee1571110d");
+	});
 });
