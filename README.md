@@ -30,7 +30,11 @@ sudo dpkg -i lsb-cprocsp-devel_4.0.0-4_all.deb
 
 2) cd {path-to-node-ecrecover}/src/go/src/ecrecover
 
-3) export CGO_CFLAGS=$CGO_CFLAGS" -DUNIX"
+3) Установить переменные окружения:
+
+export GOPATH=~/work/new-node-ecrecover/src/go
+
+export CGO_CFLAGS=$CGO_CFLAGS" -DUNIX"
 
 4) go install crypto_csp
 
