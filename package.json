@@ -1,7 +1,7 @@
 {
   "name": "ecrecover",
-  "version": "0.0.1",
-  "description": "Node.js package to recover multichain address",
+  "version": "0.0.3",
+  "description": "Node.js package to work with multichain compatible signatures/addresses",
   "main": "index.js",
   "directories": {
     "test": "test"

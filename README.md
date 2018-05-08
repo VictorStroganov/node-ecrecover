@@ -1,5 +1,5 @@
 # node-ecrecover
-Node.js package to work with signatures/
+Node.js package to work with multichain compatible signatures/addresses
 
 ## Установка и настройка пакета
 
