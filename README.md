@@ -9,13 +9,13 @@ Node.js package to work with signatures/
 
 ### Ubuntu
 
-npm install node-cryptopro
+npm install node-ecrecover
 
 ### Windows
 
 npm install --global --production windows-build-tools
 
-npm install node-cryptopro
+npm install node-ecrecover
 
 
 ## Компиляция .so/.dll библиотеки
@@ -28,7 +28,7 @@ cd linux-amd64_deb
 
 sudo dpkg -i lsb-cprocsp-devel_4.0.0-4_all.deb
 
-2) cd node-ecrecover/src/go/src/ecrecover
+2) cd {path-to-node-ecrecover}/src/go/src/ecrecover
 
 3) export CGO_CFLAGS=$CGO_CFLAGS" -DUNIX"
 
@@ -43,16 +43,22 @@ sudo dpkg -i lsb-cprocsp-devel_4.0.0-4_all.deb
 
 1) Установить КриптоПро OCSP SDK (https://www.cryptopro.ru/products/pki/ocsp/sdk/downloads).
 
-2) Установить переменные окружения:
+2) Установить TDM-GCC-64 (http://tdm-gcc.tdragon.net/download) для компиляции C.
 
-set PATH=%PATH%C:\Program Files (x86)\Crypto Pro\SDK\include
+3) Установить переменные окружения:
 
-set INCLUDE=%INCLUDE%C:\Program Files (x86)\Crypto Pro\SDK\include
+set GOPATH={path-to-node-ecrecover}\src\go
 
-set LIBPATH=%LIBPATH%C:\Program Files (x86)\Crypto Pro\SDK\lib\amd64
+set CC=C:\TDM-GCC-64\bin\gcc.exe
 
-set LIBPATH=%LIBPATH%C:\Program Files (x86)\Crypto Pro\SDK\lib
+set C_INCLUDE_PATH=C:\Program Files (x86)\Crypto Pro\SDK\include
 
-3) Скомпилировать:
+4) Перейти в {path-to-node-ecrecover}/src/go/src/ecrecover
 
-cl.exe /D_USRDLL /D_WINDLL nodeCryptopro.c /link /DLL /OUT:nodeCryptopro.dll
+5) Скомпилировать:
+
+go install crypto_csp
+
+go build -o ecrecover.dll -buildmode=c-shared ecrecover.go
+
+6) Переместить ecrecover.dll из {path-to-node-ecrecover}/src/go/src/ecrecover в {path-to-node-ecrecover}/lib
