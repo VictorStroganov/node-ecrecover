@@ -161,14 +161,12 @@ unsigned char* SignHash(const char *container, const char *pin, const uint8_t *m
     return pbSignature;
 }
 
-uint8_t SignatureVerify(const char *container, const char *pin, const uint8_t *msg, uint8_t *signature, uint8_t *pubkey)
+uint8_t SignatureVerify(const uint8_t *msg, uint8_t *signature, uint8_t *pubkey)
 {
     uint8_t result = 0;
     HCRYPTPROV hProv = 0;
     HCRYPTHASH hHash = 0;
     BYTE *pbHash= (BYTE *)msg;
-    LPCSTR pbContainer= (LPCSTR)container;
-    BYTE *pbContainerPass= (BYTE *)pin;
     BYTE *pbSignature = signature;
     DWORD dwSigLen = 64;
     HCRYPTKEY hPubKey = 0;
@@ -179,25 +177,26 @@ uint8_t SignatureVerify(const char *container, const char *pin, const uint8_t *m
     memcpy(pbKeyBlob + 37, pubkey, 64);
 
     // Initializing crypto provider
-    if(!CryptAcquireContext(
+    if(!CryptAcquireContext(&hProv, NULL, NULL, PROV_GOST_2012_256, /*PROV_GOST_2001_DH,*/CRYPT_VERIFYCONTEXT))
+ /*   if(!CryptAcquireContext(
             &hProv,
             pbContainer,
             NULL,
             PROV_GOST_2012_256,
-            0))
+            0))*/
     {
         HandleError("Error during CryptAcquireContext.");
     }
 
     // Setting pin code for key storage
-    if(!CryptSetProvParam(
+/*    if(!CryptSetProvParam(
             hProv,
             PP_KEYEXCHANGE_PIN,
             pbContainerPass,
             0))
     {
         HandleError("Error during CryptSetProvParam.");
-    }
+    }*/
 
     if(!CryptImportKey(
             hProv,

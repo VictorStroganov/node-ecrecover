@@ -262,7 +262,7 @@ func recoverCompact(curve *Curve, hash, signature []byte) (*PublicKey, error) {
 		return nil, err
 	}
 
-	verified := cspVerifySignature(nodeContainer, nodePin, hash, signature, key.Raw())
+	verified := cspVerifySignature(hash, signature, key.Raw())
 	if !verified {
 		return nil, errors.New("Restored pubkey doesn't verify given signature using CSP")
 	}

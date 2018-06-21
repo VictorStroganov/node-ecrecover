@@ -1,22 +1,25 @@
 package crypto_csp
 
+//  -ljemalloc
+
 /*
 #cgo linux CFLAGS: -I/opt/cprocsp/include/cpcsp/
 #cgo linux,386 darwin CFLAGS: -I/opt/cprocsp/include/cpcsp/
 #cgo linux,amd64 CFLAGS: -I/opt/cprocsp/include/cpcsp/
 #cgo 386 darwin LDFLAGS: -L/opt/cprocsp/lib/ -lcapi10 -lcapi20 -lrdrsup -lssp
-#cgo linux,amd64 LDFLAGS: -L/opt/cprocsp/lib/amd64 -lcapi10 -lcapi20 -lrdrsup -lssp -lcpext -lurlretrieve -lcpasn1 -lcplib -lcpalloc  -ljemalloc
+#cgo linux,amd64 LDFLAGS: -L/opt/cprocsp/lib/amd64 -lcapi10 -lcapi20 -lrdrsup -lssp -lcpext -lurlretrieve -lcpasn1 -lcplib -lcpalloc
 #cgo linux,386 LDFLAGS: -L/opt/cprocsp/lib/ia32/ -lcapi10 -lcapi20 -lrdrsup -lssp
 #cgo windows LDFLAGS: -lcrypt32 -lpthread
 
 #include "csp.c"
+
 */
 import "C"
 import (
 	"unsafe"
 	_ "encoding/hex"
 	_ "encoding/binary"
-	"fmt"
+	_ "fmt"
 )
 /*
 type credentials struct {
@@ -130,9 +133,7 @@ func bytePtrUint8(s []byte) *C.uint8_t {
 	return nil
 }
 
-func cspVerifySignature(container, pin string, hash, signature, pubkey []byte) bool {
-	fmt.Printf("cspVerifySignature container: %s\n", container);
-	
+func cspVerifySignature(hash, signature, pubkey []byte) bool {
 	sig := make([]byte, 64)
 	sig = append(sig, signature[32:64]...)
 	sig = append(sig, signature[:32]...)
@@ -142,15 +143,11 @@ func cspVerifySignature(container, pin string, hash, signature, pubkey []byte) b
 	copy(revHash, hash)
 	reverse(revHash)
 
-	cContainer := C.CString(container)
-	cPin := C.CString(pin)
 	cHash := bytePtrUint8(revHash)
 	cSig := bytePtrUint8(sig)
 	cPub := bytePtrUint8(pubkey)
-	defer C.free(unsafe.Pointer(cContainer))
-	defer C.free(unsafe.Pointer(cPin))
 
-	return uint8ToBool(C.SignatureVerify(cContainer, cPin, cHash, cSig, cPub))
+	return uint8ToBool(C.SignatureVerify(cHash, cSig, cPub))
 }
 
 func uint8ToBool(b C.uint8_t) bool {
