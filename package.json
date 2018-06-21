@@ -1,6 +1,6 @@
 {
   "name": "ecrecover",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Node.js package to work with multichain compatible signatures/addresses",
   "main": "index.js",
   "directories": {
